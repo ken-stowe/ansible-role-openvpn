@@ -31,7 +31,7 @@
 
 - name: Add port rules (iptables)
   include: iptables.yml
-  when: firewalld.rc != 0 and ufw.rc != 0 and iptables.rc == 0
+  when: ansible_distribution != "Amazon" and firewalld.rc != 0 and ufw.rc != 0 and iptables.rc == 0
 
 - name: Add port rules (firewalld)
   include: firewalld.yml
