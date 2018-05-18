@@ -52,3 +52,10 @@ ldap:
   require_group: False
   group_base_dn: ou=Groups,dc=example,dc=com
   group_search_filter: (|(cn=developers)(cn=artists))
+
+# MFA Duo configuration
+openvpn_use_mfa_duo: false
+mfa_duo_version: 2.2
+mfa_duo_integration_key: ''
+mfa_duo_secret_key: ''
+mfa_duo_hostname: ''

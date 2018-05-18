@@ -92,3 +92,8 @@ plugin /usr/lib/openvpn/plugin/lib/openvpn-auth-ldap.so "{{ openvpn_base_dir }}/
 {% endif %}
 client-cert-not-required
 {% endif %}
+
+{% if openvpn_use_mfa_duo|bool %}
+### MFA DUO ###
+plugin /opt/duo/duo_openvpn.so '{{mfa_duo_integration_key}} {{mfa_duo_secret_key}} {{mfa_duo_hostname}}'
+{% endif %}

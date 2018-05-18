@@ -26,6 +26,10 @@
    state: present
   when: openvpn_use_ldap
 
+- name: Install mfa DUO plugin
+  include: mfa_duo.yml
+  when: openvpn_use_mfa_duo
+
 # RHEL has the group 'nobody', 'Debian/Ubuntu' have 'nogroup'
 # standardize on 'nogroup'
 - name: Ensure group 'nogroup' is present
