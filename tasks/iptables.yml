@@ -10,6 +10,10 @@
     state: present
   when: ansible_os_family == "Debian"
 
+- name: Install iptables-services (Amazon Linux 2)
+  yum: name='iptables-services'
+  when: ansible_distribution == "Amazon" and ansible_service_mgr == 'systemd'
+
 - name: Enable iptables
   service:
     name: "{{ iptables_service }}"
@@ -19,7 +23,7 @@
 - name: iptables - Allow VPN forwarding
   iptables:
     chain: FORWARD
-    source: "{{openvpn_server_network}}/24"
+    source: "{{openvpn_server_network}}/{{openvpn_server_netmask}}"
     jump: ACCEPT
     comment: "Allow VPN forwarding"
   notify: "save iptables"
@@ -45,8 +49,8 @@
   iptables:
     table: nat
     chain: POSTROUTING
-    source: "{{openvpn_server_network}}/24"
-    to_source: "{{ansible_default_ipv4.address}}"
-    jump: SNAT
+    source: "{{openvpn_server_network}}/{{openvpn_server_netmask}}"
+    out_interface: eth0
+    jump: MASQUERADE
     comment: "Perform NAT readdressing"
   notify: "save iptables"
