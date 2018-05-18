@@ -20,6 +20,15 @@
     enabled: true
     state: started
 
+- name: Flush iptable all entries
+  iptables:
+    flush: true
+
+- name: Flush iptable all entries (nat table)
+  iptables:
+    flush: true
+    table: nat
+
 - name: iptables - Allow VPN forwarding
   iptables:
     chain: FORWARD
