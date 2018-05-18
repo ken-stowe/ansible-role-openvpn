@@ -14,7 +14,7 @@
     chdir: "{{ openvpn_key_dir }}"
     creates: "{{item}}.key"
   with_items: "{{clients}}"
-  when: openvpn_client_pass is not defined
+  when: not openvpn_client_pass
 
 - name: generate client key (wirh randam pass)
   shell: |
@@ -25,7 +25,7 @@
     chdir: "{{ openvpn_key_dir }}"
     creates: "{{item}}.key"
   with_items: "{{clients}}"
-  when: openvpn_client_pass is defined
+  when: openvpn_client_pass
 
 - name: protect client keys
   file:
@@ -38,7 +38,7 @@
     path: "{{openvpn_key_dir}}/{{item}}.pass"
     mode: 0400
   with_items: "{{clients}}"
-  when: openvpn_client_pass is defined
+  when: openvpn_client_pass
 
 - name: sign client key
   command: openssl x509 -req -in {{item}}.csr -out {{item}}.crt -CA ca.crt -CAkey ca-key.pem -sha256 -days 3650 -extfile openssl-client.ext
