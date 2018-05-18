@@ -8,9 +8,9 @@
     src: https://github.com/duosecurity/duo_openvpn/archive/{{mfa_duo_version}}.tar.gz
     dest: /usr/src
     remote_src: yes
-  when: duo_openvpn_so.stat is not defined
+  when: not duo_openvpn_so.stat.exists
 
 - name: install duo_openvpn-{{mfa_duo_version}}
   become: true
   shell: 'cd /usr/src/duo_openvpn-{{mfa_duo_version}}; make & make install'
-  when: duo_openvpn_so.stat is not defined
+  when: not duo_openvpn_so.stat.exists
