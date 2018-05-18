@@ -4,6 +4,23 @@
     state: present
   when: ansible_distribution == "CentOS" or ansible_distribution=="RedHat"
 
+- name: Install EPEL (Amazon Linux 2) - check
+  stat: path=/etc/yum.repos.d/epel.repo
+  register: epel_repo
+  when: ansible_distribution == "Amazon" and ansible_service_mgr == 'systemd'
+
+- name: Install EPEL (Amazon Linux 2) - install
+  yum:
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+    state: present
+  when: ansible_distribution == "Amazon" and ansible_service_mgr == 'systemd' and not epel_repo.stat.exists
+
+- name: Install EPEL (Amazon Linux 2) - import GPG key
+  rpm_key:
+    key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7"
+    state: present
+  when: ansible_distribution == "Amazon" and ansible_service_mgr == 'systemd' and not epel_repo.stat.exists
+
 - name: Install python2-dnf for Fedora dnf support
   raw: dnf install -y python2-dnf
   when:
